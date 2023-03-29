@@ -10,6 +10,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 
+import java.util.ArrayList;
+
 public class HelloController {
 
     @FXML
@@ -87,10 +89,31 @@ public class HelloController {
     @FXML
     private TextField txtSM;
 
+    private ArrayList<Computer> ordinateur = new ArrayList<Computer>();
+
     public void onAjouterCarteClick(ActionEvent event) {
     }
 
     public void onEnregistrerClick(ActionEvent event) {
+        String nom = txtNom.getText();
+        String model = txtModel.getText();
+        int memory = (int) slRam.getValue();
+        int nbProcessors = (int) slNbProc.getValue();
+        int HDD = Integer.parseInt(txtQteStock.getText());
+        String OS = "";
+        if (rbtnLinux.isSelected()){
+            OS = rbtnLinux.getText();
+        }
+        else if (rbtnMac.isSelected()){
+            OS = rbtnMac.getText();
+        }
+        else if (rbtnWindows.isSelected()){
+            OS = rbtnWindows.getText();
+        }
+
+        Computer computer = new Computer (nom, model, memory, nbProcessors, HDD, OS);
+        ordinateur.add(computer);
+
     }
 
     public void onEffacerClick(ActionEvent event) {
