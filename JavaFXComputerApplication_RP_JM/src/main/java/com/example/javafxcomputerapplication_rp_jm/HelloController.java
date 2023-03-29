@@ -2,6 +2,7 @@ package com.example.javafxcomputerapplication_rp_jm;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -12,7 +13,10 @@ import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
 
-public class HelloController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class HelloController implements Initializable {
 
     @FXML
     private Button btnAjoutCarte;
@@ -90,11 +94,12 @@ public class HelloController {
     private TextField txtSM;
 
     private ArrayList<Computer> ordinateur = new ArrayList<Computer>();
-
+    private ArrayList<NetworkCard> carteReseau = new ArrayList<NetworkCard>();
     public void onAjouterCarteClick(ActionEvent event) {
     }
 
     public void onEnregistrerClick(ActionEvent event) {
+
         String nom = txtNom.getText();
         String model = txtModel.getText();
         int memory = (int) slRam.getValue();
@@ -114,9 +119,30 @@ public class HelloController {
         Computer computer = new Computer (nom, model, memory, nbProcessors, HDD, OS);
         ordinateur.add(computer);
 
+
+        String adresseIp = txtAddIp.getText();
+        String masqueSR = txtSM.getText();
+        NetworkCard carte = new NetworkCard(adresseIp, masqueSR);
+        carteReseau.add(carte);
+
+
+
+
     }
 
     public void onEffacerClick(ActionEvent event) {
+        txtNom.setText("");
+        txtModel.setText("");
+        txtSM.setText("");
+        txtAddIp.setText("");
+        txtQteStock.setText("");
+        rbtnLinux.setSelected(false);
+        rbtnMac.setSelected(false);
+        rbtnWindows.setSelected(false);
+        slNbProc.setValue(2);
+        slRam.setValue(2);
+
+
     }
 
     public void onExporterClick(ActionEvent event) {
@@ -126,5 +152,10 @@ public class HelloController {
     }
 
     public void onPingClick(ActionEvent event) {
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle){
+
     }
 }
