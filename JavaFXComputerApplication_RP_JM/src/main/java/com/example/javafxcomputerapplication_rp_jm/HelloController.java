@@ -1,5 +1,6 @@
 package com.example.javafxcomputerapplication_rp_jm;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -86,4 +87,21 @@ public class HelloController {
     @FXML
     private TextField txtSM;
 
+    public void onAjouterCarteClick(ActionEvent event) {
+    }
+
+    public void onEnregistrerClick(ActionEvent event) {
+    }
+
+    public void onEffacerClick(ActionEvent event) {
+    }
+
+    public void onExporterClick(ActionEvent event) {
+    }
+
+    public void onImporterClick(ActionEvent event) {
+    }
+
+    public void onPingClick(ActionEvent event) {
+    }
 }
