@@ -1,6 +1,7 @@
 package com.example.javafxcomputerapplication_rp_jm;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -61,9 +62,6 @@ public class HelloController implements Initializable {
     private Label lblSM;
 
     @FXML
-    private ListView<?> lvListeView;
-
-    @FXML
     private RadioButton rbtnLinux;
 
     @FXML
@@ -96,6 +94,12 @@ public class HelloController implements Initializable {
     private ArrayList<Computer> ordinateur = new ArrayList<Computer>();
     private ArrayList<NetworkCard> carteReseau = new ArrayList<NetworkCard>();
     public void onAjouterCarteClick(ActionEvent event) {
+        String adresseIp = txtAddIp.getText();
+        String masqueSR = txtSM.getText();
+        NetworkCard carte = new NetworkCard(adresseIp, masqueSR);
+        carteReseau.add(carte);
+
+
     }
 
     public void onEnregistrerClick(ActionEvent event) {
@@ -117,16 +121,10 @@ public class HelloController implements Initializable {
         }
 
         Computer computer = new Computer (nom, model, memory, nbProcessors, HDD, OS);
+        for (NetworkCard c : carteReseau){
+            computer.setCard(c);
+        }
         ordinateur.add(computer);
-
-
-        String adresseIp = txtAddIp.getText();
-        String masqueSR = txtSM.getText();
-        NetworkCard carte = new NetworkCard(adresseIp, masqueSR);
-        carteReseau.add(carte);
-
-
-
 
     }
 
@@ -153,9 +151,15 @@ public class HelloController implements Initializable {
 
     public void onPingClick(ActionEvent event) {
     }
+    public void onListeSelectionChange(Event event) {
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
     }
+
+
+
 }
+
