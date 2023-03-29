@@ -68,11 +68,6 @@
                                         <Insets right="5.0" />
                                     </GridPane.margin>
                                 </TextField>
-                                <TextField fx:id="txtQteMem" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                    <GridPane.margin>
-                                        <Insets right="5.0" />
-                                    </GridPane.margin>
-                                </TextField>
                                 <TextField fx:id="txtQteStock" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                     <GridPane.margin>
                                         <Insets right="5.0" />
@@ -83,11 +78,8 @@
                                         <Insets left="5.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <TextField fx:id="txtNbProc" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                    <GridPane.margin>
-                                        <Insets right="5.0" />
-                                    </GridPane.margin>
-                                </TextField>
+                        <Slider fx:id="slRam" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Slider fx:id="slNbProc" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                             </children>
                             <padding>
                                 <Insets left="5.0" />
@@ -222,7 +214,6 @@
                                  </StackPane.margin>
                               </Button>
                            </children></StackPane>
-                        <Slider layoutX="572.0" layoutY="99.0" orientation="VERTICAL" />
                             </children>
                         </Pane>
                     </children>

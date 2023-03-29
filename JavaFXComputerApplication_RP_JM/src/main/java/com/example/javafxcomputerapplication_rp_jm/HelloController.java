@@ -6,6 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 
 public class HelloController {
@@ -65,19 +66,19 @@ public class HelloController {
     private RadioButton rbtnWindows;
 
     @FXML
+    private Slider slNbProc;
+
+    @FXML
+    private Slider slRam;
+
+    @FXML
     private TextField txtAddIp;
 
     @FXML
     private TextField txtModel;
 
     @FXML
-    private TextField txtNbProc;
-
-    @FXML
     private TextField txtNom;
-
-    @FXML
-    private TextField txtQteMem;
 
     @FXML
     private TextField txtQteStock;
