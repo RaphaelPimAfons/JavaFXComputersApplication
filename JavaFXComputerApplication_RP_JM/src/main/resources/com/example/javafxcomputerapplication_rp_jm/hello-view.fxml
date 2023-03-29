@@ -77,15 +77,22 @@
                                     <HBox.margin>
                                         <Insets left="5.0" />
                                     </HBox.margin>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="OS" />
+                           </toggleGroup>
                                 </RadioButton>
+
                                 <ImageView fx:id="imgLinux" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
                                 <RadioButton fx:id="rbtnWindows" mnemonicParsing="false" text="Windows">
+
                                     <HBox.margin>
                                         <Insets left="150.0" />
                                     </HBox.margin>
                                 </RadioButton>
+
                                 <ImageView fx:id="imgWindows" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
                                 <RadioButton fx:id="rbtnMac" mnemonicParsing="false" text="Mac">
+
                                     <HBox.margin>
                                         <Insets left="100.0" />
                                     </HBox.margin>
