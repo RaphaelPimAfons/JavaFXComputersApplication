@@ -91,8 +91,19 @@ public class HelloController implements Initializable {
     @FXML
     private TextField txtSM;
 
+    @FXML
+    private Label lblRAM;
+
+    @FXML
+    private Label lblValProc;
+
     private ArrayList<Computer> ordinateur = new ArrayList<Computer>();
     private ArrayList<NetworkCard> carteReseau = new ArrayList<NetworkCard>();
+
+    private int nbProc;
+
+    private int nbRam;
+
     public void onAjouterCarteClick(ActionEvent event) {
         String adresseIp = txtAddIp.getText();
         String masqueSR = txtSM.getText();
@@ -106,8 +117,8 @@ public class HelloController implements Initializable {
 
         String nom = txtNom.getText();
         String model = txtModel.getText();
-        int memory = (int) slRam.getValue();
-        int nbProcessors = (int) slNbProc.getValue();
+        int memory = nbRam;
+        int nbProcessors = nbProc;
         int HDD = Integer.parseInt(txtQteStock.getText());
         String OS = "";
         if (rbtnLinux.isSelected()){
@@ -121,9 +132,9 @@ public class HelloController implements Initializable {
         }
 
         Computer computer = new Computer (nom, model, memory, nbProcessors, HDD, OS);
-        for (NetworkCard c : carteReseau){
-            computer.setCard(c);
-        }
+       // for (NetworkCard c : carteReseau){
+        computer.setCard(carteReseau);
+        //}
         ordinateur.add(computer);
 
     }
@@ -139,6 +150,8 @@ public class HelloController implements Initializable {
         rbtnWindows.setSelected(false);
         slNbProc.setValue(2);
         slRam.setValue(2);
+        lblRAM.setText("1");
+        lblValProc.setText("1");
 
 
     }
@@ -153,6 +166,19 @@ public class HelloController implements Initializable {
     }
     public void onListeSelectionChange(Event event) {
     }
+
+    public void onSliRAM(){
+        nbRam = (int) slRam.getValue();
+        System.out.println(nbRam);
+        lblRAM.setText(Integer.toString(nbRam));
+    }
+
+    public void onNbProc(){
+        nbProc = (int) slNbProc.getValue();
+        System.out.println(nbProc);
+        lblValProc.setText(Integer.toString(nbProc));
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){

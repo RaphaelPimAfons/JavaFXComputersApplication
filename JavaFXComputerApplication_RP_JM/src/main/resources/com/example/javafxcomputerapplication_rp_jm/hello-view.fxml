@@ -64,8 +64,17 @@
                                         <Insets left="5.0" />
                                     </GridPane.margin>
                                 </Label>
-                        <Slider fx:id="slRam" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Slider fx:id="slNbProc" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Slider fx:id="slRam" majorTickUnit="31.0" max="128.0" min="1.0" onKeyPressed="#onSliRAM" onMouseReleased="#onSliRAM" onTouchReleased="#onSliRAM" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Slider fx:id="slNbProc" majorTickUnit="7.0" max="64.0" min="1.0" minorTickCount="2" onKeyPressed="#onNbProc" onMouseReleased="#onNbProc" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label fx:id="lblRAM" text="1" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="270.0" />
+                           </GridPane.margin></Label>
+                        <Label fx:id="lblValProc" text="1" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="270.0" />
+                           </GridPane.margin>
+                        </Label>
                             </children>
                             <padding>
                                 <Insets left="5.0" />
