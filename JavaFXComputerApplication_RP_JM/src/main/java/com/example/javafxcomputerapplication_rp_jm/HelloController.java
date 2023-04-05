@@ -1,16 +1,14 @@
 package com.example.javafxcomputerapplication_rp_jm;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.ArrayList;
 
@@ -19,6 +17,8 @@ import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
 
+    @FXML
+    private TableView tblOrdinateur;
     @FXML
     private Button btnAjoutCarte;
 
@@ -136,6 +136,11 @@ public class HelloController implements Initializable {
         computer.setCard(carteReseau);
         //}
         ordinateur.add(computer);
+        for (Computer c: ordinateur){
+            System.out.println(c.getName());
+        }
+        tblOrdinateur.getItems().add(ordinateur);
+
 
     }
 
@@ -165,6 +170,7 @@ public class HelloController implements Initializable {
     public void onPingClick(ActionEvent event) {
     }
     public void onListeSelectionChange(Event event) {
+
     }
 
     public void onSliRAM(){
@@ -180,9 +186,33 @@ public class HelloController implements Initializable {
     }
 
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
+        TableColumn<Computer, String> colName = new TableColumn<>("Nom");
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
+        TableColumn<Computer, String> colModel = new TableColumn<>("Modèle");
+        colModel.setCellValueFactory(new PropertyValueFactory<>("model"));
+
+        TableColumn<Computer, String> colMemory = new TableColumn<>("RAM");
+        colMemory.setCellValueFactory(new PropertyValueFactory<>("memory"));
+
+        TableColumn<Computer, String> colProc = new TableColumn<>("Processeurs logiques");
+        colProc.setCellValueFactory(new PropertyValueFactory<>("nbProcessors"));
+
+        TableColumn<Computer, String> colStore = new TableColumn<>("Stockage");
+        colStore.setCellValueFactory(new PropertyValueFactory<>("HDD"));
+
+        TableColumn<Computer, String> colOS = new TableColumn<>("OS");
+        colOS.setCellValueFactory(new PropertyValueFactory<>("OS"));
+
+        tblOrdinateur.getColumns().add(colName);
+        tblOrdinateur.getColumns().add(colModel);
+        tblOrdinateur.getColumns().add(colMemory);
+        tblOrdinateur.getColumns().add(colStore);
+        tblOrdinateur.getColumns().add(colOS);
+        tblOrdinateur.getColumns().add(colProc);
     }
 
 
