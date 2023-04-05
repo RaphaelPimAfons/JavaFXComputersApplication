@@ -11,7 +11,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
+import java.io.*;
+import java.nio.Buffer;
 import java.util.ArrayList;
 
 import java.net.URL;
@@ -19,6 +23,12 @@ import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
 
+    @FXML
+    private ImageView imgMac;
+    @FXML
+    private ImageView imgLinux;
+    @FXML
+    private ImageView imgWindows;
     @FXML
     private Button btnAjoutCarte;
 
@@ -35,10 +45,10 @@ public class HelloController implements Initializable {
     private Button btnPing;
 
     @FXML
-    private ComboBox<?> cmbAffCartes;
+    private ComboBox<String> cmbAffCartes;
 
     @FXML
-    private ComboBox<?> cmbListeRec;
+    private ComboBox<String> cmbListeRec;
 
     @FXML
     private Label lblAddIp;
@@ -93,38 +103,71 @@ public class HelloController implements Initializable {
 
     private ArrayList<Computer> ordinateur = new ArrayList<Computer>();
     private ArrayList<NetworkCard> carteReseau = new ArrayList<NetworkCard>();
-    public void onAjouterCarteClick(ActionEvent event) {
-        String adresseIp = txtAddIp.getText();
-        String masqueSR = txtSM.getText();
-        NetworkCard carte = new NetworkCard(adresseIp, masqueSR);
-        carteReseau.add(carte);
 
+    private InputStream inputLinux;
+    private InputStream inputWindows;
+    private InputStream inputMac;
+
+
+
+    public void onAjouterCarteClick(ActionEvent event) {
+
+        String regExpIp = "^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\\.(?!$)|$)){4}$";
+        String regExpSm = "^((2[0-5][0-5]|1[\\d][\\d]|[\\d][\\d]|[\\d])\\.){3}(2[0-5][0-5]|1[\\d][\\d]|[\\d][\\d]|[\\d])$";
+
+        if (txtAddIp.getText().matches(regExpIp) && txtSM.getText().matches(regExpSm)) {
+            String adresseIp = txtAddIp.getText();
+            String masqueSR = txtSM.getText();
+            NetworkCard carte = new NetworkCard(adresseIp, masqueSR);
+            carteReseau.add(carte);
+
+            for (NetworkCard c : carteReseau) {
+
+                cmbAffCartes.getItems().add(String.valueOf(c.getIpAddress()));
+            }
+
+            System.out.println( adresseIp  + masqueSR);
+        }else {
+            txtSM.setStyle("-fx-border-color:red");
+            txtAddIp.setStyle("-fx-border-color:red");
+            txtSM.setText("");
+            txtAddIp.setText("");
+            System.out.println("erreur");
+        }
 
     }
 
     public void onEnregistrerClick(ActionEvent event) {
 
-        String nom = txtNom.getText();
-        String model = txtModel.getText();
-        int memory = (int) slRam.getValue();
-        int nbProcessors = (int) slNbProc.getValue();
-        int HDD = Integer.parseInt(txtQteStock.getText());
-        String OS = "";
-        if (rbtnLinux.isSelected()){
-            OS = rbtnLinux.getText();
-        }
-        else if (rbtnMac.isSelected()){
-            OS = rbtnMac.getText();
-        }
-        else if (rbtnWindows.isSelected()){
-            OS = rbtnWindows.getText();
-        }
+        String regExpTexte = "^[A-Za-z](?=.{1,29}$)[A-Za-z]*(?:\\h+[A-Z][A-Za-z]*)*$";
+        if (txtNom.getText().matches(regExpTexte) && txtModel.getText().matches(regExpTexte)) {
+            String nom = txtNom.getText();
+            String model = txtModel.getText();
+            int memory = (int) slRam.getValue();
+            int nbProcessors = (int) slNbProc.getValue();
+            int HDD = Integer.parseInt(txtQteStock.getText());
+            String OS = "";
+            if (rbtnLinux.isSelected()) {
+                OS = rbtnLinux.getText();
+            } else if (rbtnMac.isSelected()) {
+                OS = rbtnMac.getText();
+            } else if (rbtnWindows.isSelected()) {
+                OS = rbtnWindows.getText();
+            }
 
-        Computer computer = new Computer (nom, model, memory, nbProcessors, HDD, OS);
-        for (NetworkCard c : carteReseau){
-            computer.setCard(c);
+
+            Computer computer = new Computer(nom, model, memory, nbProcessors, HDD, OS);
+            for (NetworkCard c : carteReseau) {
+                computer.setCard(c);
+            }
+            ordinateur.add(computer);
+
+            System.out.println( nom + model);
+
+
+        }else {
+            System.out.println("Erreur Texte");
         }
-        ordinateur.add(computer);
 
     }
 
@@ -139,25 +182,91 @@ public class HelloController implements Initializable {
         rbtnWindows.setSelected(false);
         slNbProc.setValue(2);
         slRam.setValue(2);
+    //doit appuyer beaucoup
+        for (NetworkCard c : carteReseau) {
 
+            cmbAffCartes.getItems().remove(String.valueOf(c.getIpAddress()));
+        }
 
     }
 
     public void onExporterClick(ActionEvent event) {
+       /* //private ArrayList<Computer> ordinateur = new ArrayList<Computer>();
+        String fichier = "liste.txt";
+
+        try{
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fichier));
+            for (String element : ordinateur) {
+                writer.write(element);
+                writer.newLine();
+            }
+            writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+        }
+        }*/
     }
 
     public void onImporterClick(ActionEvent event) {
     }
 
-    public void onPingClick(ActionEvent event) {
+    public void onPingClick(ActionEvent event) throws IOException {
+        String[] command = {"cmd.exe" , "/c", "start" , "cmd.exe" , "/k" , "ping "+txtAddIp.getText() };
+        ProcessBuilder probuilder = new ProcessBuilder( command );
+        Process process = probuilder.start();
     }
     public void onListeSelectionChange(Event event) {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle){
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+/*
+        if (rbtnLinux.isSelected()) {
+            File linux = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\linux.jpg");
+            Image linuxImage = new Image(linux.toURI().toString());
+            imgLinux.setImage(linuxImage);
+        } else if (rbtnWindows.isSelected()) {
+
+            File windows = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\windows.jpg");
+            Image windowsImage = new Image(windows.toURI().toString());
+            imgWindows.setImage(windowsImage);
+        } else if (rbtnMac.isSelected()) {
+
+
+            File mac = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\mac.jpg");
+            Image macImage = new Image(mac.toURI().toString());
+            imgMac.setImage(macImage);
+        }
+*/
+
+
+        inputLinux = this.getClass().getResourceAsStream("/linux.jpg");
+        //imgLinux.setImage(new Image(inputLinux));
+
+        inputMac = this.getClass().getResourceAsStream("/mac.jpg");
+        //imgMac.setImage(new Image(inputMac));
+
+        inputWindows = this.getClass().getResourceAsStream("/windows.jpg");
+        //imgWindows.setImage(new Image(inputWindows));
+
+        imgLinux.setImage(new Image(inputLinux));
+        imgWindows.setImage(new Image(inputWindows));
 
     }
+    public void onBtnLinuxClick(ActionEvent event) {
+
+        imgWindows.setImage(null);
+        System.out.println( "Linux" +inputLinux.toString());
+
+    }
+
+    public void onBtnWindowsClick(ActionEvent event) {
+
+        imgWindows.setImage(null);
+        System.out.println( "Windows" +inputWindows.toString());
+    }
+
+
 
 
 
