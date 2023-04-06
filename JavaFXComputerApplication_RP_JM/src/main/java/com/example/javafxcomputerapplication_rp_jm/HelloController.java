@@ -178,9 +178,9 @@ public class HelloController implements Initializable {
             }
 
         Computer computer = new Computer (nom, model, memory, nbProcessors, HDD, OS);
-        for (NetworkCard c : carteReseau){
-            computer.setCard(c);
-        }
+        //for (NetworkCard c : carteReseau){
+        computer.setCard(carteReseau);
+        //}
         ordinateur.add(computer);
         tblOrdinateur.getItems().add(ordinateur);
 
@@ -291,9 +291,16 @@ public class HelloController implements Initializable {
         }
 */
 
-/*
-        inputLinux = this.getClass().getResourceAsStream("/linux.jpg");
+
+        //inputLinux = this.getClass().getResourceAsStream("/linux.jpg");
         //imgLinux.setImage(new Image(inputLinux));
+
+        TableColumn<Computer, String> colName = new TableColumn<>("Nom");
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Computer, String> colModel = new TableColumn<>("Modèle");
+        colModel.setCellValueFactory(new PropertyValueFactory<>("model"));
+
         TableColumn<Computer, String> colMemory = new TableColumn<>("RAM");
         colMemory.setCellValueFactory(new PropertyValueFactory<>("memory"));
 
@@ -312,8 +319,7 @@ public class HelloController implements Initializable {
         tblOrdinateur.getColumns().add(colStore);
         tblOrdinateur.getColumns().add(colOS);
         tblOrdinateur.getColumns().add(colProc);
-    }
-
+/*
         inputMac = this.getClass().getResourceAsStream("/mac.jpg");
         //imgMac.setImage(new Image(inputMac));
 
