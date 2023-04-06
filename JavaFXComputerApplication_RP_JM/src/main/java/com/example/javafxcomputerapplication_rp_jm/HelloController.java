@@ -1,5 +1,6 @@
 package com.example.javafxcomputerapplication_rp_jm;
 
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -20,6 +21,11 @@ import java.util.ArrayList;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class HelloController implements Initializable {
 
@@ -109,7 +115,6 @@ public class HelloController implements Initializable {
     private InputStream inputMac;
 
 
-
     public void onAjouterCarteClick(ActionEvent event) {
 
         String regExpIp = "^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\\.(?!$)|$)){4}$";
@@ -126,8 +131,8 @@ public class HelloController implements Initializable {
                 cmbAffCartes.getItems().add(String.valueOf(c.getIpAddress()));
             }
 
-            System.out.println( adresseIp  + masqueSR);
-        }else {
+            System.out.println(adresseIp + masqueSR);
+        } else {
             txtSM.setStyle("-fx-border-color:red");
             txtAddIp.setStyle("-fx-border-color:red");
             txtSM.setText("");
@@ -162,10 +167,10 @@ public class HelloController implements Initializable {
             }
             ordinateur.add(computer);
 
-            System.out.println( nom + model);
+            System.out.println(nom + model);
 
 
-        }else {
+        } else {
             System.out.println("Erreur Texte");
         }
 
@@ -182,7 +187,7 @@ public class HelloController implements Initializable {
         rbtnWindows.setSelected(false);
         slNbProc.setValue(2);
         slRam.setValue(2);
-    //doit appuyer beaucoup
+        //doit appuyer beaucoup
         for (NetworkCard c : carteReseau) {
 
             cmbAffCartes.getItems().remove(String.valueOf(c.getIpAddress()));
@@ -211,13 +216,18 @@ public class HelloController implements Initializable {
     }
 
     public void onPingClick(ActionEvent event) throws IOException {
-        String[] command = {"cmd.exe" , "/c", "start" , "cmd.exe" , "/k" , "ping "+txtAddIp.getText() };
-        ProcessBuilder probuilder = new ProcessBuilder( command );
+
+        String[] command = {"cmd.exe", "/c", "start", "cmd.exe", "/k", "ping", "127.0.0.1"};
+        ProcessBuilder probuilder = new ProcessBuilder(command);
         Process process = probuilder.start();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line); // Optional: print ping output to console
+        }
     }
     public void onListeSelectionChange(Event event) {
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 /*
@@ -239,7 +249,7 @@ public class HelloController implements Initializable {
         }
 */
 
-
+/*
         inputLinux = this.getClass().getResourceAsStream("/linux.jpg");
         //imgLinux.setImage(new Image(inputLinux));
 
@@ -251,23 +261,21 @@ public class HelloController implements Initializable {
 
         imgLinux.setImage(new Image(inputLinux));
         imgWindows.setImage(new Image(inputWindows));
-
+*/
     }
+
     public void onBtnLinuxClick(ActionEvent event) {
 
         imgWindows.setImage(null);
-        System.out.println( "Linux" +inputLinux.toString());
+        System.out.println("Linux" + inputLinux.toString());
 
     }
 
     public void onBtnWindowsClick(ActionEvent event) {
 
         imgWindows.setImage(null);
-        System.out.println( "Windows" +inputWindows.toString());
+        System.out.println("Windows" + inputWindows.toString());
     }
-
-
-
 
 
 }
