@@ -34,7 +34,7 @@ import java.io.InputStreamReader;
 public class HelloController implements Initializable {
 
     @FXML
-    private TableView tblOrdinateur;
+    private TableView<Computer> tblOrdinateur;
     @FXML
     private ImageView imgMac;
     @FXML
@@ -182,7 +182,7 @@ public class HelloController implements Initializable {
         computer.setCard(carteReseau);
         //}
         ordinateur.add(computer);
-        tblOrdinateur.getItems().add(ordinateur);
+        tblOrdinateur.getItems().addAll(ordinateur);
 
 
             System.out.println(nom + model);
@@ -264,7 +264,18 @@ public class HelloController implements Initializable {
         lblValProc.setText(Integer.toString(nbProc));
     }
 
+    public void onBtnLinuxClick(ActionEvent event) {
 
+        imgWindows.setImage(null);
+        System.out.println("Linux" + inputLinux.toString());
+
+    }
+
+    public void onBtnWindowsClick(ActionEvent event) {
+
+        imgWindows.setImage(null);
+        System.out.println("Windows" + inputWindows.toString());
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -333,18 +344,7 @@ public class HelloController implements Initializable {
 */
     }
 
-    public void onBtnLinuxClick(ActionEvent event) {
 
-        imgWindows.setImage(null);
-        System.out.println("Linux" + inputLinux.toString());
-
-    }
-
-    public void onBtnWindowsClick(ActionEvent event) {
-
-        imgWindows.setImage(null);
-        System.out.println("Windows" + inputWindows.toString());
-    }
 
 
 }
