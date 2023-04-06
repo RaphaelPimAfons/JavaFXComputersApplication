@@ -1,10 +1,14 @@
 package com.example.javafxcomputerapplication_rp_jm;
 
-import javafx.concurrent.Task;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -29,6 +33,8 @@ import java.io.InputStreamReader;
 
 public class HelloController implements Initializable {
 
+    @FXML
+    private TableView tblOrdinateur;
     @FXML
     private ImageView imgMac;
     @FXML
@@ -107,6 +113,12 @@ public class HelloController implements Initializable {
     @FXML
     private TextField txtSM;
 
+    @FXML
+    private Label lblRAM;
+
+    @FXML
+    private Label lblValProc;
+
     private ArrayList<Computer> ordinateur = new ArrayList<Computer>();
     private ArrayList<NetworkCard> carteReseau = new ArrayList<NetworkCard>();
 
@@ -114,6 +126,11 @@ public class HelloController implements Initializable {
     private InputStream inputWindows;
     private InputStream inputMac;
 
+
+
+    private int nbProc;
+
+    private int nbRam;
 
     public void onAjouterCarteClick(ActionEvent event) {
 
@@ -148,8 +165,8 @@ public class HelloController implements Initializable {
         if (txtNom.getText().matches(regExpTexte) && txtModel.getText().matches(regExpTexte)) {
             String nom = txtNom.getText();
             String model = txtModel.getText();
-            int memory = (int) slRam.getValue();
-            int nbProcessors = (int) slNbProc.getValue();
+            int memory = nbRam;
+            int nbProcessors = nbProc;
             int HDD = Integer.parseInt(txtQteStock.getText());
             String OS = "";
             if (rbtnLinux.isSelected()) {
@@ -160,12 +177,13 @@ public class HelloController implements Initializable {
                 OS = rbtnWindows.getText();
             }
 
+        Computer computer = new Computer (nom, model, memory, nbProcessors, HDD, OS);
+        for (NetworkCard c : carteReseau){
+            computer.setCard(c);
+        }
+        ordinateur.add(computer);
+        tblOrdinateur.getItems().add(ordinateur);
 
-            Computer computer = new Computer(nom, model, memory, nbProcessors, HDD, OS);
-            for (NetworkCard c : carteReseau) {
-                computer.setCard(c);
-            }
-            ordinateur.add(computer);
 
             System.out.println(nom + model);
 
@@ -187,7 +205,9 @@ public class HelloController implements Initializable {
         rbtnWindows.setSelected(false);
         slNbProc.setValue(2);
         slRam.setValue(2);
-        //doit appuyer beaucoup
+        lblRAM.setText("1");
+        lblValProc.setText("1");
+        //doit appuyer beaucoup Jo regarde
         for (NetworkCard c : carteReseau) {
 
             cmbAffCartes.getItems().remove(String.valueOf(c.getIpAddress()));
@@ -227,7 +247,23 @@ public class HelloController implements Initializable {
         }
     }
     public void onListeSelectionChange(Event event) {
+
     }
+
+    public void onSliRAM(){
+        nbRam = (int) slRam.getValue();
+        System.out.println(nbRam);
+        lblRAM.setText(Integer.toString(nbRam));
+    }
+
+    public void onNbProc(){
+        nbProc = (int) slNbProc.getValue();
+        System.out.println(nbProc);
+        lblValProc.setText(Integer.toString(nbProc));
+    }
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 /*
@@ -242,6 +278,12 @@ public class HelloController implements Initializable {
             imgWindows.setImage(windowsImage);
         } else if (rbtnMac.isSelected()) {
 
+    public void initialize(URL url, ResourceBundle resourceBundle){
+        TableColumn<Computer, String> colName = new TableColumn<>("Nom");
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Computer, String> colModel = new TableColumn<>("Modèle");
+        colModel.setCellValueFactory(new PropertyValueFactory<>("model"));
 
             File mac = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\mac.jpg");
             Image macImage = new Image(mac.toURI().toString());
@@ -252,6 +294,25 @@ public class HelloController implements Initializable {
 /*
         inputLinux = this.getClass().getResourceAsStream("/linux.jpg");
         //imgLinux.setImage(new Image(inputLinux));
+        TableColumn<Computer, String> colMemory = new TableColumn<>("RAM");
+        colMemory.setCellValueFactory(new PropertyValueFactory<>("memory"));
+
+        TableColumn<Computer, String> colProc = new TableColumn<>("Processeurs logiques");
+        colProc.setCellValueFactory(new PropertyValueFactory<>("nbProcessors"));
+
+        TableColumn<Computer, String> colStore = new TableColumn<>("Stockage");
+        colStore.setCellValueFactory(new PropertyValueFactory<>("HDD"));
+
+        TableColumn<Computer, String> colOS = new TableColumn<>("OS");
+        colOS.setCellValueFactory(new PropertyValueFactory<>("OS"));
+
+        tblOrdinateur.getColumns().add(colName);
+        tblOrdinateur.getColumns().add(colModel);
+        tblOrdinateur.getColumns().add(colMemory);
+        tblOrdinateur.getColumns().add(colStore);
+        tblOrdinateur.getColumns().add(colOS);
+        tblOrdinateur.getColumns().add(colProc);
+    }
 
         inputMac = this.getClass().getResourceAsStream("/mac.jpg");
         //imgMac.setImage(new Image(inputMac));

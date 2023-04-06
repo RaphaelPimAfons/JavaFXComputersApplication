@@ -3,6 +3,7 @@ package com.example.javafxcomputerapplication_rp_jm;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,7 +18,7 @@ public class Computer {
     private int nbProcessors;
     private int HDD;
     private String OS;
-    private NetworkCard card;
+    private ArrayList<NetworkCard> card;
 
     public Computer(String name, String model, String OS) {
         this.name = name;
@@ -82,11 +83,11 @@ public class Computer {
         this.OS = OS;
     }
 
-    public NetworkCard getCard() {
+    public ArrayList<NetworkCard> getCard() {
         return card;
     }
 
-    public void setCard(NetworkCard card) {
+    public void setCard(ArrayList<NetworkCard> card) {
         this.card = card;
     }
 
