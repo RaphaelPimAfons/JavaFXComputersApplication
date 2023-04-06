@@ -208,9 +208,11 @@ public class HelloController implements Initializable {
         lblRAM.setText("1");
         lblValProc.setText("1");
         //doit appuyer beaucoup Jo regarde
-        for (NetworkCard c : carteReseau) {
+        for (int i = 0; i < carteReseau.size(); i++){
+            for (NetworkCard c : carteReseau) {
 
-            cmbAffCartes.getItems().remove(String.valueOf(c.getIpAddress()));
+                cmbAffCartes.getItems().remove(String.valueOf(c.getIpAddress()));
+            }
         }
 
     }
