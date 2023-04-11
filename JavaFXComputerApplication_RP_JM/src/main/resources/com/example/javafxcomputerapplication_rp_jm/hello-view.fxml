@@ -215,7 +215,7 @@
                                  </StackPane.margin>
                               </Button>
                            </children></StackPane>
-                        <TableView fx:id="tblOrdinateur" layoutX="14.0" layoutY="61.0" prefHeight="254.0" prefWidth="528.0" />
+                        <TableView fx:id="tblOrdinateur" layoutX="14.0" layoutY="61.0" prefHeight="254.0" prefWidth="564.0" />
                             </children>
                         </Pane>
                     </children>

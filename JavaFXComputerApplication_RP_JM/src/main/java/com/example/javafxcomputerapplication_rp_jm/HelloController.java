@@ -186,9 +186,9 @@ public class HelloController implements Initializable {
             }
 
         Computer computer = new Computer (nom, model, memory, nbProcessors, HDD, OS);
-        //for (NetworkCard c : carteReseau){
+        for (NetworkCard c : carteReseau){
         computer.setCard(carteReseau);
-        //}
+        }
         ordinateur.add(computer);
         //tblOrdinateur.getItems().addAll(ordinateur);
             tblOrdinateur.getItems().add(computer);
@@ -266,12 +266,12 @@ public class HelloController implements Initializable {
     }
 
     public void onImporterClick(ActionEvent event) {
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Importer un document texte");
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Fichiers texte (*.txt)", "*.txt"));
         File file = fileChooser.showOpenDialog(null);
-
         if (file != null) {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -306,7 +306,29 @@ public class HelloController implements Initializable {
 
     public void onPingClick(ActionEvent event) throws IOException {
 
+        Computer computer = tblOrdinateur.getSelectionModel().getSelectedItem();
+        if (computer != null) {
+            String ipAddress = String.valueOf(computer.getCard());
+            try {
+                // Effectuer le ping vers l'adresse IP de l'ordinateur
+                InetAddress inetAddress = InetAddress.getByName(ipAddress);
+                boolean isReachable = inetAddress.isReachable(5000); // Timeout de 5 secondes
+                if (isReachable) {
+                    System.out.println("L'ordinateur " + computer.getName() + " est en ligne.");
+                } else {
+                    System.out.println("L'ordinateur " + computer.getName() + " est hors ligne.");
+                }
+            } catch (UnknownHostException e) {
+                System.out.println("Adresse IP invalide : " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("Erreur lors de la tentative de ping : " + e.getMessage());
+            }
+        } else {
+            System.out.println("Aucun ordinateur sélectionné.");
+        }
 
+
+/*
         String[] command = {"cmd.exe", "/c", "start", "cmd.exe", "/k", "ping", "IP"+ txtAddIp.getText()};
 
             ProcessBuilder probuilder = new ProcessBuilder(command);
@@ -316,6 +338,8 @@ public class HelloController implements Initializable {
             while ((line = reader.readLine()) != null) {
                 System.out.println(line); // Optional: print ping output to console
             }
+*/
+
         }
 
     public void onListeSelectionChange(Event event) {
@@ -410,7 +434,8 @@ public class HelloController implements Initializable {
         TableColumn<Computer, String> colOS = new TableColumn<>("OS");
         colOS.setCellValueFactory(new PropertyValueFactory<>("OS"));
 
-
+        TableColumn<Computer, String> colCard = new TableColumn<>("card");
+        colCard.setCellValueFactory(new PropertyValueFactory<>("card"));
 
         tblOrdinateur.getColumns().add(colName);
         tblOrdinateur.getColumns().add(colModel);
@@ -418,6 +443,7 @@ public class HelloController implements Initializable {
         tblOrdinateur.getColumns().add(colStore);
         tblOrdinateur.getColumns().add(colOS);
         tblOrdinateur.getColumns().add(colProc);
+        tblOrdinateur.getColumns().add(colCard);
 /*
         inputMac = this.getClass().getResourceAsStream("/mac.jpg");
         //imgMac.setImage(new Image(inputMac));
