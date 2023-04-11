@@ -100,7 +100,7 @@
                                 </RadioButton>
 
                                 <ImageView fx:id="imgWindows" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
-                                <RadioButton fx:id="rbtnMac" mnemonicParsing="false" text="Mac" toggleGroup="$OS">
+                                <RadioButton fx:id="rbtnMac" mnemonicParsing="false" onAction="#onBtnMacClick" text="Mac" toggleGroup="$OS">
 
                                     <HBox.margin>
                                         <Insets left="100.0" />
@@ -166,7 +166,7 @@
                 </Pane>
             </content>
         </Tab>
-        <Tab fx:id="tabListeRec" onSelectionChanged="#onListeSelectionChange" text="Liste récapitulatif">
+        <Tab fx:id="tabListeRec" text="Liste récapitulatif">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
@@ -215,7 +215,7 @@
                                  </StackPane.margin>
                               </Button>
                            </children></StackPane>
-                        <TableView fx:id="tblOrdinateur" layoutX="14.0" layoutY="61.0" prefHeight="254.0" prefWidth="528.0" />
+                        <TableView fx:id="tblOrdinateur" layoutX="14.0" layoutY="61.0" prefHeight="254.0" prefWidth="564.0" />
                             </children>
                         </Pane>
                     </children>
