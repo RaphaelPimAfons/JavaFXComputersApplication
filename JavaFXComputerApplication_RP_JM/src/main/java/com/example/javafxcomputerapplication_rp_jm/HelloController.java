@@ -260,6 +260,45 @@ public class HelloController implements Initializable {
     }
 
     public void onImporterClick(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Importer un document texte");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichiers texte (*.txt)", "*.txt"));
+        File file = fileChooser.showOpenDialog(null);
+
+        if (file != null) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] data = line.split(";"); // Assumer que les données sont séparées par des points-virgules
+                    if (data.length == 6) { // Assumer que chaque ligne doit contenir 6 colonnes
+                        String nom = data[0].trim();
+                        String model = data[1].trim();
+                        //int memory = Integer.parseInt(data[2].trim());
+                        int memory = Integer.parseInt(data[2]);
+                        //int nbProcessors = Integer.parseInt(data[3].trim());
+                        int nbProcessors = Integer.parseInt(data[3]);
+                        //int HDD = Integer.parseInt(data[4].trim());
+                        int HDD = Integer.parseInt(data[4]);
+                        String OS = data[5].trim();
+                        //lblRAM.setText(Integer.toString(nbRam));
+                        Computer computer = new Computer(nom, model, memory, nbProcessors, HDD, OS);
+                        ordinateur.add(computer);
+                    } else {
+                        System.out.println("Erreur : La ligne ne contient pas le bon nombre de colonnes");
+                    }
+                }
+                reader.close();
+                tblOrdinateur.getItems().addAll(ordinateur);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Erreur : Impossible de lire le fichier");
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                System.out.println("Erreur : Les données ne sont pas au bon format");
+            }
+        }
     }
 
     public void onPingClick(ActionEvent event) throws IOException {
@@ -292,15 +331,29 @@ public class HelloController implements Initializable {
 
     public void onBtnLinuxClick(ActionEvent event) {
 
+        if (rbtnLinux.isSelected()) {
+            InputStream input2 = this.getClass().getResourceAsStream("/linux.jpg");
+            imgLinux.setImage(new Image(input2));
+        }else {
+            imgLinux.setImage(null);
+            System.out.println("rater");
+        }
+/*
         imgWindows.setImage(null);
         System.out.println("Linux" + inputLinux.toString());
+
+ */
 
     }
 
     public void onBtnWindowsClick(ActionEvent event) {
-
+        InputStream input2 = this.getClass().getResourceAsStream("/windows.jpg");
+        imgWindows.setImage(new Image(input2));
+/*
         imgWindows.setImage(null);
         System.out.println("Windows" + inputWindows.toString());
+
+ */
     }
 
     @Override
@@ -370,6 +423,8 @@ public class HelloController implements Initializable {
         imgLinux.setImage(new Image(inputLinux));
         imgWindows.setImage(new Image(inputWindows));
 */
+
+
     }
 
 
