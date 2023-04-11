@@ -291,16 +291,32 @@ public class HelloController implements Initializable {
     }
 
     public void onBtnLinuxClick(ActionEvent event) {
+/*
+        if (rbtnLinux.isSelected()) {
+            InputStream input2 = this.getClass().getResourceAsStream("/linux.jpg");
+            imgLinux.setImage(new Image(input2));
+        }else {
+            imgLinux.setImage(null);
+        }
 
-        imgWindows.setImage(null);
+ */
+        /*
+        imgWindows.setImage();
         System.out.println("Linux" + inputLinux.toString());
-
+        */
     }
 
     public void onBtnWindowsClick(ActionEvent event) {
+/*
+        InputStream input2 = this.getClass().getResourceAsStream("/windows.jpg");
+        imgWindows.setImage(new Image(input2));
 
+ */
+/*
         imgWindows.setImage(null);
         System.out.println("Windows" + inputWindows.toString());
+
+ */
     }
 
     @Override
@@ -370,6 +386,13 @@ public class HelloController implements Initializable {
         imgLinux.setImage(new Image(inputLinux));
         imgWindows.setImage(new Image(inputWindows));
 */
+        if (rbtnLinux.isSelected()) {
+            InputStream input2 = this.getClass().getResourceAsStream("/linux.jpg");
+            imgLinux.setImage(new Image(input2));
+        }else {
+            InputStream input2 = this.getClass().getResourceAsStream("/windows.jpg");
+            imgWindows.setImage(new Image(input2));
+        }
     }
 
 
