@@ -2,6 +2,7 @@ package com.example.javafxcomputerapplication_rp_jm;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -20,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
+import javax.security.auth.callback.Callback;
 import java.io.*;
 import java.nio.Buffer;
 import java.util.ArrayList;
@@ -227,6 +229,21 @@ public class HelloController implements Initializable {
         }
 
     }
+    public void onFilterCombo (ActionEvent event){
+        String osSelectionne = cmbListeRec.getSelectionModel().getSelectedItem();
+        if (osSelectionne == null || osSelectionne.isEmpty() || osSelectionne.equals("Tous les ordinateurs")) {
+            tblOrdinateur.getItems().setAll(ordinateur);
+        } else {
+            ArrayList<Computer> ordinateursLinux = new ArrayList<>();
+            for (Computer c : ordinateur) {
+                if (c.getOS().equals(osSelectionne)) {
+                    ordinateursLinux.add(c);
+                }
+            }
+            tblOrdinateur.getItems().setAll(ordinateursLinux);
+        }
+
+    }
 
     public void onExporterClick(ActionEvent event) {
 
@@ -387,34 +404,12 @@ public class HelloController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-/*
-        if (rbtnLinux.isSelected()) {
-            File linux = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\linux.jpg");
-            Image linuxImage = new Image(linux.toURI().toString());
-            imgLinux.setImage(linuxImage);
-        } else if (rbtnWindows.isSelected()) {
-
-            File windows = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\windows.jpg");
-            Image windowsImage = new Image(windows.toURI().toString());
-            imgWindows.setImage(windowsImage);
-        } else if (rbtnMac.isSelected()) {
-
-    public void initialize(URL url, ResourceBundle resourceBundle){
-        TableColumn<Computer, String> colName = new TableColumn<>("Nom");
-        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Computer, String> colModel = new TableColumn<>("Modèle");
-        colModel.setCellValueFactory(new PropertyValueFactory<>("model"));
-
-            File mac = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\mac.jpg");
-            Image macImage = new Image(mac.toURI().toString());
-            imgMac.setImage(macImage);
-        }
-*/
 
 
-        //inputLinux = this.getClass().getResourceAsStream("/linux.jpg");
-        //imgLinux.setImage(new Image(inputLinux));
+        cmbListeRec.getItems().addAll("Tous les ordinateurs", "Linux", "Windows", "Mac");
+        cmbListeRec.getSelectionModel().selectFirst(); // sélectionne "Tous les ordinateurs" par défaut
+
+        cmbListeRec.setOnAction(this::onFilterCombo);
 
         TableColumn<Computer, String> colName = new TableColumn<>("Nom");
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -434,8 +429,25 @@ public class HelloController implements Initializable {
         TableColumn<Computer, String> colOS = new TableColumn<>("OS");
         colOS.setCellValueFactory(new PropertyValueFactory<>("OS"));
 
-        TableColumn<Computer, String> colCard = new TableColumn<>("card");
-        colCard.setCellValueFactory(new PropertyValueFactory<>("card"));
+        TableColumn<Computer, String> colIP = new TableColumn<>("IP");
+
+        colIP.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Computer, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Computer, String> param) {
+                Computer computer = param.getValue();
+                ArrayList<String> ipAddresses = new ArrayList<>();
+                for (NetworkCard c : carteReseau){
+                    ipAddresses.add(c.getIpAddress());
+                }
+                return new SimpleStringProperty(String.join(", ", ipAddresses));
+            }
+        });
+
+
+
+
+
+
 
         tblOrdinateur.getColumns().add(colName);
         tblOrdinateur.getColumns().add(colModel);
@@ -443,18 +455,7 @@ public class HelloController implements Initializable {
         tblOrdinateur.getColumns().add(colStore);
         tblOrdinateur.getColumns().add(colOS);
         tblOrdinateur.getColumns().add(colProc);
-        tblOrdinateur.getColumns().add(colCard);
-/*
-        inputMac = this.getClass().getResourceAsStream("/mac.jpg");
-        //imgMac.setImage(new Image(inputMac));
-
-        inputWindows = this.getClass().getResourceAsStream("/windows.jpg");
-        //imgWindows.setImage(new Image(inputWindows));
-
-        imgLinux.setImage(new Image(inputLinux));
-        imgWindows.setImage(new Image(inputWindows));
-*/
-
+        tblOrdinateur.getColumns().add(colIP);
 
     }
 
