@@ -237,12 +237,12 @@ public class HelloController implements Initializable {
                 // Parcourir les éléments du tableau
                 for (Computer computer : tblOrdinateur.getItems()) {
                     // Écrire les informations dans le fichier texte
-                    bufferedWriter.write("Nom : " + computer.getName() + "\n");
-                    bufferedWriter.write("Modèle : " + computer.getModel() + "\n");
-                    bufferedWriter.write("Mémoire RAM : " + computer.getMemory() + " Go\n");
-                    bufferedWriter.write("Nombre de processeurs : " + computer.getNbProcessors() + "\n");
-                    bufferedWriter.write("Quantité de stockage : " + computer.getHDD() + " Go\n");
-                    bufferedWriter.write("Système d'exploitation : " + computer.getOS() + "\n");
+                    bufferedWriter.write("Nom : " + computer.getName() + "; \n");
+                    bufferedWriter.write("Modèle : " + computer.getModel() + ";\n");
+                    bufferedWriter.write("Mémoire RAM : " + computer.getMemory() + " Go;\n");
+                    bufferedWriter.write("Nombre de processeurs : " + computer.getNbProcessors() + ";\n");
+                    bufferedWriter.write("Quantité de stockage : " + computer.getHDD() + " Go;\n");
+                    bufferedWriter.write("Système d'exploitation : " + computer.getOS() + ";\n");
                     bufferedWriter.write("Carte(s) réseau : \n");
                     for (NetworkCard networkCard : computer.getCard()) {
                         bufferedWriter.write("- Adresse IP : " + networkCard.getIpAddress() + ", Masque sous-réseau : " + networkCard.getMask() + "\n");
@@ -275,12 +275,9 @@ public class HelloController implements Initializable {
                     if (data.length == 6) { // Assumer que chaque ligne doit contenir 6 colonnes
                         String nom = data[0].trim();
                         String model = data[1].trim();
-                        //int memory = Integer.parseInt(data[2].trim());
-                        int memory = Integer.parseInt(data[2]);
-                        //int nbProcessors = Integer.parseInt(data[3].trim());
-                        int nbProcessors = Integer.parseInt(data[3]);
-                        //int HDD = Integer.parseInt(data[4].trim());
-                        int HDD = Integer.parseInt(data[4]);
+                        int memory = Integer.parseInt(data[2].trim());
+                        int nbProcessors = Integer.parseInt(data[3].trim());
+                        int HDD = Integer.parseInt(data[4].trim());
                         String OS = data[5].trim();
                         //lblRAM.setText(Integer.toString(nbRam));
                         Computer computer = new Computer(nom, model, memory, nbProcessors, HDD, OS);
