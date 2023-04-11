@@ -135,12 +135,16 @@ public class HelloController implements Initializable {
 
     public void onAjouterCarteClick(ActionEvent event) {
 
+        //Déclaration des regex
         String regExpIp = "^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\\.(?!$)|$)){4}$";
         String regExpSm = "^((2[0-5][0-5]|1[\\d][\\d]|[\\d][\\d]|[\\d])\\.){3}(2[0-5][0-5]|1[\\d][\\d]|[\\d][\\d]|[\\d])$";
 
+        //Contrôle que les informations entrées sont correct.
         if (txtAddIp.getText().matches(regExpIp) && txtSM.getText().matches(regExpSm)) {
             String adresseIp = txtAddIp.getText();
             String masqueSR = txtSM.getText();
+
+            //Ajout des cartes réseaux
             NetworkCard carte = new NetworkCard(adresseIp, masqueSR);
             carteReseau.add(carte);
 
@@ -165,7 +169,7 @@ public class HelloController implements Initializable {
 
     public void onEnregistrerClick(ActionEvent event) {
 
-        String regExpTexte = "^[A-Za-z](?=.{1,29}$)[A-Za-z]*(?:\\h+[A-Z][A-Za-z]*)*$";
+        String regExpTexte = "^[A-Za-z0-9](?=.{1,29}$)[A-Za-z]*(?:\\h+[A-Z][A-Za-z]*)*$";
         if (txtNom.getText().matches(regExpTexte) && txtModel.getText().matches(regExpTexte)) {
             String nom = txtNom.getText();
             String model = txtModel.getText();
@@ -212,7 +216,9 @@ public class HelloController implements Initializable {
         slRam.setValue(2);
         lblRAM.setText("1");
         lblValProc.setText("1");
-        //doit appuyer beaucoup Jo regarde
+        imgLinux.setImage(null);
+        imgWindows.setImage(null);
+        imgMac.setImage(null);
         for (int i = 0; i < carteReseau.size(); i++){
             for (NetworkCard c : carteReseau) {
 
