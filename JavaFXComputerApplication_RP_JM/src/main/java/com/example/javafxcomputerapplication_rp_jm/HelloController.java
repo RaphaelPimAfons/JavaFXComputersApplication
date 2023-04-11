@@ -18,6 +18,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 
 import java.io.*;
 import java.nio.Buffer;
@@ -143,10 +144,13 @@ public class HelloController implements Initializable {
             NetworkCard carte = new NetworkCard(adresseIp, masqueSR);
             carteReseau.add(carte);
 
+            cmbAffCartes.getItems().add(carte.getIpAddress());
+            /*
             for (NetworkCard c : carteReseau) {
 
-                cmbAffCartes.getItems().add(String.valueOf(c.getIpAddress()));
-            }
+                //cmbAffCartes.getItems().add(String.valueOf(c.getIpAddress()));
+                cmbAffCartes.getItems().add(carte.getIpAddress());
+            }*/
 
             System.out.println(adresseIp + masqueSR);
         } else {
@@ -182,7 +186,8 @@ public class HelloController implements Initializable {
         computer.setCard(carteReseau);
         //}
         ordinateur.add(computer);
-        tblOrdinateur.getItems().addAll(ordinateur);
+        //tblOrdinateur.getItems().addAll(ordinateur);
+            tblOrdinateur.getItems().add(computer);
 
 
             System.out.println(nom + model);
@@ -218,20 +223,40 @@ public class HelloController implements Initializable {
     }
 
     public void onExporterClick(ActionEvent event) {
-       /* //private ArrayList<Computer> ordinateur = new ArrayList<Computer>();
-        String fichier = "liste.txt";
 
-        try{
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fichier));
-            for (String element : ordinateur) {
-                writer.write(element);
-                writer.newLine();
-            }
-            writer.close();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Exporter vers un fichier texte");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier texte (*.txt)", "*.txt"));
+        File file = fileChooser.showSaveDialog(btnExporter.getScene().getWindow());
+
+        if (file != null) {
+            try {
+                FileWriter fileWriter = new FileWriter(file);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                // Parcourir les éléments du tableau
+                for (Computer computer : tblOrdinateur.getItems()) {
+                    // Écrire les informations dans le fichier texte
+                    bufferedWriter.write("Nom : " + computer.getName() + "\n");
+                    bufferedWriter.write("Modèle : " + computer.getModel() + "\n");
+                    bufferedWriter.write("Mémoire RAM : " + computer.getMemory() + " Go\n");
+                    bufferedWriter.write("Nombre de processeurs : " + computer.getNbProcessors() + "\n");
+                    bufferedWriter.write("Quantité de stockage : " + computer.getHDD() + " Go\n");
+                    bufferedWriter.write("Système d'exploitation : " + computer.getOS() + "\n");
+                    bufferedWriter.write("Carte(s) réseau : \n");
+                    for (NetworkCard networkCard : computer.getCard()) {
+                        bufferedWriter.write("- Adresse IP : " + networkCard.getIpAddress() + ", Masque sous-réseau : " + networkCard.getMask() + "\n");
+                    }
+                    bufferedWriter.write("\n");
+                }
+
+                bufferedWriter.close();
+                fileWriter.close();
+                System.out.println("Données exportées avec succès !");
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Erreur lors de l'exportation des données : " + e.getMessage());
+            }
         }
-        }*/
     }
 
     public void onImporterClick(ActionEvent event) {
@@ -239,15 +264,16 @@ public class HelloController implements Initializable {
 
     public void onPingClick(ActionEvent event) throws IOException {
 
-        String[] command = {"cmd.exe", "/c", "start", "cmd.exe", "/k", "ping", "127.0.0.1"};
-        ProcessBuilder probuilder = new ProcessBuilder(command);
-        Process process = probuilder.start();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line); // Optional: print ping output to console
+        String[] command = {"cmd.exe", "/c", "start", "cmd.exe", "/k", "ping", "IP"+ txtAddIp.getText()};
+
+            ProcessBuilder probuilder = new ProcessBuilder(command);
+            Process process = probuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line); // Optional: print ping output to console
+            }
         }
-    }
     public void onListeSelectionChange(Event event) {
 
     }
@@ -325,6 +351,8 @@ public class HelloController implements Initializable {
 
         TableColumn<Computer, String> colOS = new TableColumn<>("OS");
         colOS.setCellValueFactory(new PropertyValueFactory<>("OS"));
+
+
 
         tblOrdinateur.getColumns().add(colName);
         tblOrdinateur.getColumns().add(colModel);
