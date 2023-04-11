@@ -1,31 +1,33 @@
+// Importation de classes
 package com.example.javafxcomputerapplication_rp_jm;
-
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- *
- * @author Lbi
- * @version 1.0
+
+ Cette classe définit les caractéristiques d'un ordinateur.
+
+ Elle contient plusieurs méthodes pour modifier et accéder aux attributs de l'ordinateur.
  */
 public class Computer {
 
+    // Attributs de l'ordinateur
     private String name;
     private String model;
     private int memory;
     private int nbProcessors;
     private int HDD;
     private String OS;
-    private ArrayList<NetworkCard> card;
+    private NetworkCard card;
 
+    // Constructeur pour un ordinateur avec un nom, un modèle et un système d'exploitation
     public Computer(String name, String model, String OS) {
         this.name = name;
         this.model = model;
         this.OS = OS;
     }
 
+    // Constructeur pour un ordinateur avec un nom, un modèle, une mémoire, un nombre de processeurs, un disque dur et un système d'exploitation
     public Computer(String name, String model, int memory, int nbProcessors, int HDD, String OS) {
         this.name = name;
         this.model = model;
@@ -35,6 +37,7 @@ public class Computer {
         this.OS = OS;
     }
 
+    // Accesseurs pour les attributs de l'ordinateur
     public String getName() {
         return name;
     }
@@ -83,17 +86,16 @@ public class Computer {
         this.OS = OS;
     }
 
-    public ArrayList<NetworkCard> getCard() {
+    public NetworkCard getCard() {
         return card;
     }
 
-    public void setCard(ArrayList<NetworkCard> card) {
+    public void setCard(NetworkCard card) {
         this.card = card;
     }
 
+    // Méthode pour exporter les caractéristiques de l'ordinateur dans un fichier
     public void export( File f ) {
 
     }
-
-
 }

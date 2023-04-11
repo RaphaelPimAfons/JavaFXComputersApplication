@@ -2,6 +2,7 @@ package com.example.javafxcomputerapplication_rp_jm;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -19,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 
 import java.io.*;
 import java.nio.Buffer;
@@ -135,26 +137,17 @@ public class HelloController implements Initializable {
 
     public void onAjouterCarteClick(ActionEvent event) {
 
-        //Déclaration des regex
         String regExpIp = "^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\\.(?!$)|$)){4}$";
         String regExpSm = "^((2[0-5][0-5]|1[\\d][\\d]|[\\d][\\d]|[\\d])\\.){3}(2[0-5][0-5]|1[\\d][\\d]|[\\d][\\d]|[\\d])$";
 
-        //Contrôle que les informations entrées sont correct.
         if (txtAddIp.getText().matches(regExpIp) && txtSM.getText().matches(regExpSm)) {
             String adresseIp = txtAddIp.getText();
             String masqueSR = txtSM.getText();
-
-            //Ajout des cartes réseaux
             NetworkCard carte = new NetworkCard(adresseIp, masqueSR);
             carteReseau.add(carte);
 
             cmbAffCartes.getItems().add(carte.getIpAddress());
-            /*
-            for (NetworkCard c : carteReseau) {
 
-                //cmbAffCartes.getItems().add(String.valueOf(c.getIpAddress()));
-                cmbAffCartes.getItems().add(carte.getIpAddress());
-            }*/
 
             System.out.println(adresseIp + masqueSR);
         } else {
@@ -169,7 +162,7 @@ public class HelloController implements Initializable {
 
     public void onEnregistrerClick(ActionEvent event) {
 
-        String regExpTexte = "^[A-Za-z0-9](?=.{1,29}$)[A-Za-z]*(?:\\h+[A-Z][A-Za-z]*)*$";
+        String regExpTexte = "^[A-Za-z](?=.{1,29}$)[A-Za-z]*(?:\\h+[A-Z][A-Za-z]*)*$";
         if (txtNom.getText().matches(regExpTexte) && txtModel.getText().matches(regExpTexte)) {
             String nom = txtNom.getText();
             String model = txtModel.getText();
@@ -186,11 +179,11 @@ public class HelloController implements Initializable {
             }
 
         Computer computer = new Computer (nom, model, memory, nbProcessors, HDD, OS);
-        //for (NetworkCard c : carteReseau){
-        computer.setCard(carteReseau);
-        //}
+
+        for (NetworkCard c : carteReseau){
+            computer.setCard(c);
+        }
         ordinateur.add(computer);
-        //tblOrdinateur.getItems().addAll(ordinateur);
             tblOrdinateur.getItems().add(computer);
 
 
@@ -216,14 +209,27 @@ public class HelloController implements Initializable {
         slRam.setValue(2);
         lblRAM.setText("1");
         lblValProc.setText("1");
-        imgLinux.setImage(null);
-        imgWindows.setImage(null);
-        imgMac.setImage(null);
         for (int i = 0; i < carteReseau.size(); i++){
             for (NetworkCard c : carteReseau) {
 
                 cmbAffCartes.getItems().remove(String.valueOf(c.getIpAddress()));
             }
+        }
+
+    }
+
+    public void onFilterCombo (ActionEvent event){
+        String osSelectionne = cmbListeRec.getSelectionModel().getSelectedItem();
+        if (osSelectionne == null || osSelectionne.isEmpty() || osSelectionne.equals("Tous les ordinateurs")) {
+            tblOrdinateur.getItems().setAll(ordinateur);
+        } else {
+            ArrayList<Computer> ordinateursLinux = new ArrayList<>();
+            for (Computer c : ordinateur) {
+                if (c.getOS().equals(osSelectionne)) {
+                    ordinateursLinux.add(c);
+                }
+            }
+            tblOrdinateur.getItems().setAll(ordinateursLinux);
         }
 
     }
@@ -243,16 +249,14 @@ public class HelloController implements Initializable {
                 // Parcourir les éléments du tableau
                 for (Computer computer : tblOrdinateur.getItems()) {
                     // Écrire les informations dans le fichier texte
-                    bufferedWriter.write("Nom : " + computer.getName() + "; \n");
-                    bufferedWriter.write("Modèle : " + computer.getModel() + ";\n");
-                    bufferedWriter.write("Mémoire RAM : " + computer.getMemory() + " Go;\n");
-                    bufferedWriter.write("Nombre de processeurs : " + computer.getNbProcessors() + ";\n");
-                    bufferedWriter.write("Quantité de stockage : " + computer.getHDD() + " Go;\n");
-                    bufferedWriter.write("Système d'exploitation : " + computer.getOS() + ";\n");
+                    bufferedWriter.write("Nom : " + computer.getName() + "\n");
+                    bufferedWriter.write("Modèle : " + computer.getModel() + "\n");
+                    bufferedWriter.write("Mémoire RAM : " + computer.getMemory() + " Go\n");
+                    bufferedWriter.write("Nombre de processeurs : " + computer.getNbProcessors() + "\n");
+                    bufferedWriter.write("Quantité de stockage : " + computer.getHDD() + " Go\n");
+                    bufferedWriter.write("Système d'exploitation : " + computer.getOS() + "\n");
                     bufferedWriter.write("Carte(s) réseau : \n");
-                    for (NetworkCard networkCard : computer.getCard()) {
-                        bufferedWriter.write("- Adresse IP : " + networkCard.getIpAddress() + ", Masque sous-réseau : " + networkCard.getMask() + "\n");
-                    }
+                    bufferedWriter.write("- Adresse IP : " + computer.getCard().getIpAddress() + ", Masque sous-réseau : " + computer.getCard().getMask() + "\n");
                     bufferedWriter.write("\n");
                 }
 
@@ -266,46 +270,9 @@ public class HelloController implements Initializable {
     }
 
     public void onImporterClick(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Importer un document texte");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Fichiers texte (*.txt)", "*.txt"));
-        File file = fileChooser.showOpenDialog(null);
-
-        if (file != null) {
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(file));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] data = line.split(";"); // Assumer que les données sont séparées par des points-virgules
-                    if (data.length == 6) { // Assumer que chaque ligne doit contenir 6 colonnes
-                        String nom = data[0].trim();
-                        String model = data[1].trim();
-                        int memory = Integer.parseInt(data[2].trim());
-                        int nbProcessors = Integer.parseInt(data[3].trim());
-                        int HDD = Integer.parseInt(data[4].trim());
-                        String OS = data[5].trim();
-                        //lblRAM.setText(Integer.toString(nbRam));
-                        Computer computer = new Computer(nom, model, memory, nbProcessors, HDD, OS);
-                        ordinateur.add(computer);
-                    } else {
-                        System.out.println("Erreur : La ligne ne contient pas le bon nombre de colonnes");
-                    }
-                }
-                reader.close();
-                tblOrdinateur.getItems().addAll(ordinateur);
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Erreur : Impossible de lire le fichier");
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                System.out.println("Erreur : Les données ne sont pas au bon format");
-            }
-        }
     }
 
     public void onPingClick(ActionEvent event) throws IOException {
-
 
         String[] command = {"cmd.exe", "/c", "start", "cmd.exe", "/k", "ping", "IP"+ txtAddIp.getText()};
 
@@ -317,7 +284,6 @@ public class HelloController implements Initializable {
                 System.out.println(line); // Optional: print ping output to console
             }
         }
-
     public void onListeSelectionChange(Event event) {
 
     }
@@ -334,63 +300,15 @@ public class HelloController implements Initializable {
         lblValProc.setText(Integer.toString(nbProc));
     }
 
-    public void onBtnLinuxClick(ActionEvent event) {
 
-        if (rbtnLinux.isSelected()) {
-            InputStream input2 = this.getClass().getResourceAsStream("/linux.jpg");
-            imgLinux.setImage(new Image(input2));
-        }else {
-            imgLinux.setImage(null);
-            System.out.println("rater");
-        }
-/*
-        imgWindows.setImage(null);
-        System.out.println("Linux" + inputLinux.toString());
-
- */
-
-    }
-
-    public void onBtnWindowsClick(ActionEvent event) {
-        InputStream input2 = this.getClass().getResourceAsStream("/windows.jpg");
-        imgWindows.setImage(new Image(input2));
-/*
-        imgWindows.setImage(null);
-        System.out.println("Windows" + inputWindows.toString());
-
- */
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-/*
-        if (rbtnLinux.isSelected()) {
-            File linux = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\linux.jpg");
-            Image linuxImage = new Image(linux.toURI().toString());
-            imgLinux.setImage(linuxImage);
-        } else if (rbtnWindows.isSelected()) {
 
-            File windows = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\windows.jpg");
-            Image windowsImage = new Image(windows.toURI().toString());
-            imgWindows.setImage(windowsImage);
-        } else if (rbtnMac.isSelected()) {
+        cmbListeRec.getItems().addAll("Tous les ordinateurs", "Linux", "Windows", "Mac");
+        cmbListeRec.getSelectionModel().selectFirst(); // sélectionne "Tous les ordinateurs" par défaut
 
-    public void initialize(URL url, ResourceBundle resourceBundle){
-        TableColumn<Computer, String> colName = new TableColumn<>("Nom");
-        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Computer, String> colModel = new TableColumn<>("Modèle");
-        colModel.setCellValueFactory(new PropertyValueFactory<>("model"));
-
-            File mac = new File("C:\\Users\\josguerreir\\OneDrive - Education Vaud\\Documents\\ImageProjet\\mac.jpg");
-            Image macImage = new Image(mac.toURI().toString());
-            imgMac.setImage(macImage);
-        }
-*/
-
-
-        //inputLinux = this.getClass().getResourceAsStream("/linux.jpg");
-        //imgLinux.setImage(new Image(inputLinux));
+        cmbListeRec.setOnAction(this::onFilterCombo);
 
         TableColumn<Computer, String> colName = new TableColumn<>("Nom");
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -410,6 +328,24 @@ public class HelloController implements Initializable {
         TableColumn<Computer, String> colOS = new TableColumn<>("OS");
         colOS.setCellValueFactory(new PropertyValueFactory<>("OS"));
 
+        TableColumn<Computer, String> colIP = new TableColumn<>("IP");
+
+        colIP.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Computer, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Computer, String> param) {
+                Computer computer = param.getValue();
+                ArrayList<String> ipAddresses = new ArrayList<>();
+                for (NetworkCard c : carteReseau){
+                    ipAddresses.add(c.getIpAddress());
+                }
+                return new SimpleStringProperty(String.join(", ", ipAddresses));
+            }
+        });
+
+
+
+
+
 
 
         tblOrdinateur.getColumns().add(colName);
@@ -418,18 +354,15 @@ public class HelloController implements Initializable {
         tblOrdinateur.getColumns().add(colStore);
         tblOrdinateur.getColumns().add(colOS);
         tblOrdinateur.getColumns().add(colProc);
-/*
-        inputMac = this.getClass().getResourceAsStream("/mac.jpg");
-        //imgMac.setImage(new Image(inputMac));
+        tblOrdinateur.getColumns().add(colIP);
 
-        inputWindows = this.getClass().getResourceAsStream("/windows.jpg");
-        //imgWindows.setImage(new Image(inputWindows));
-
-        imgLinux.setImage(new Image(inputLinux));
-        imgWindows.setImage(new Image(inputWindows));
-*/
-
-
+        if (rbtnLinux.isSelected()) {
+            InputStream input2 = this.getClass().getResourceAsStream("/linux.jpg");
+            imgLinux.setImage(new Image(input2));
+        }else {
+            InputStream input2 = this.getClass().getResourceAsStream("/windows.jpg");
+            imgWindows.setImage(new Image(input2));
+        }
     }
 
 

@@ -185,7 +185,7 @@
                                  <padding>
                                     <Insets left="5.0" />
                                  </padding></Label>
-                                        <ComboBox fx:id="cmbListeRec" prefHeight="25.0" prefWidth="293.0" GridPane.columnIndex="1" />
+                                        <ComboBox fx:id="cmbListeRec" onAction="#onFilterCombo" prefHeight="25.0" prefWidth="293.0" GridPane.columnIndex="1" />
                                     </children>
                                 </GridPane>
                                 <GridPane layoutX="14.0" layoutY="335.0">
