@@ -82,7 +82,7 @@
                         </GridPane>
                         <HBox layoutY="192.0" prefHeight="25.0" prefWidth="590.0">
                             <children>
-                                <RadioButton fx:id="rbtnLinux" mnemonicParsing="false" onAction="#onBtnLinuxClick" text="Linux">
+                                <RadioButton fx:id="rbtnLinux" mnemonicParsing="false" text="Linux">
                                     <HBox.margin>
                                         <Insets left="5.0" />
                                     </HBox.margin>
@@ -92,7 +92,7 @@
                                 </RadioButton>
 
                                 <ImageView fx:id="imgLinux" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
-                                <RadioButton fx:id="rbtnWindows" mnemonicParsing="false" onAction="#onBtnWindowsClick" text="Windows" toggleGroup="$OS">
+                                <RadioButton fx:id="rbtnWindows" mnemonicParsing="false" text="Windows" toggleGroup="$OS">
 
                                     <HBox.margin>
                                         <Insets left="150.0" />
