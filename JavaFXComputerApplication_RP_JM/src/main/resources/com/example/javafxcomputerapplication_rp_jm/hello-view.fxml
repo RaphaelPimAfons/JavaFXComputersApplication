@@ -64,8 +64,17 @@
                                         <Insets left="5.0" />
                                     </GridPane.margin>
                                 </Label>
-                        <Slider fx:id="slRam" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Slider fx:id="slNbProc" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Slider fx:id="slRam" majorTickUnit="31.0" max="128.0" min="1.0" onKeyPressed="#onSliRAM" onMouseReleased="#onSliRAM" onTouchReleased="#onSliRAM" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Slider fx:id="slNbProc" majorTickUnit="7.0" max="64.0" min="1.0" minorTickCount="2" onKeyPressed="#onNbProc" onMouseReleased="#onNbProc" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label fx:id="lblRAM" text="1" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="270.0" />
+                           </GridPane.margin></Label>
+                        <Label fx:id="lblValProc" text="1" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="270.0" />
+                           </GridPane.margin>
+                        </Label>
                             </children>
                             <padding>
                                 <Insets left="5.0" />
@@ -73,7 +82,7 @@
                         </GridPane>
                         <HBox layoutY="192.0" prefHeight="25.0" prefWidth="590.0">
                             <children>
-                                <RadioButton fx:id="rbtnLinux" mnemonicParsing="false" text="Linux">
+                                <RadioButton fx:id="rbtnLinux" mnemonicParsing="false" onAction="#onBtnLinuxClick" text="Linux">
                                     <HBox.margin>
                                         <Insets left="5.0" />
                                     </HBox.margin>
@@ -83,7 +92,7 @@
                                 </RadioButton>
 
                                 <ImageView fx:id="imgLinux" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
-                                <RadioButton fx:id="rbtnWindows" mnemonicParsing="false" text="Windows" toggleGroup="$OS">
+                                <RadioButton fx:id="rbtnWindows" mnemonicParsing="false" onAction="#onBtnWindowsClick" text="Windows" toggleGroup="$OS">
 
                                     <HBox.margin>
                                         <Insets left="150.0" />
@@ -97,7 +106,7 @@
                                         <Insets left="100.0" />
                                     </HBox.margin>
                                 </RadioButton>
-                                <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
+                                <ImageView fx:id="imgMac" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
                             </children>
                         </HBox>
                         <GridPane layoutY="247.0" prefHeight="90.0" prefWidth="600.0">
@@ -206,12 +215,7 @@
                                  </StackPane.margin>
                               </Button>
                            </children></StackPane>
-                        <TableView fx:id="tblOrdinateur" layoutX="14.0" layoutY="61.0" prefHeight="254.0" prefWidth="528.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
-                        </TableView>
+                        <TableView fx:id="tblOrdinateur" layoutX="14.0" layoutY="61.0" prefHeight="254.0" prefWidth="528.0" />
                             </children>
                         </Pane>
                     </children>
