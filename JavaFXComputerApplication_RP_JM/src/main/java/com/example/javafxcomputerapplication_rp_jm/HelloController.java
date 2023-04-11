@@ -306,6 +306,7 @@ public class HelloController implements Initializable {
 
     public void onPingClick(ActionEvent event) throws IOException {
 
+
         String[] command = {"cmd.exe", "/c", "start", "cmd.exe", "/k", "ping", "IP"+ txtAddIp.getText()};
 
             ProcessBuilder probuilder = new ProcessBuilder(command);
@@ -316,6 +317,7 @@ public class HelloController implements Initializable {
                 System.out.println(line); // Optional: print ping output to console
             }
         }
+
     public void onListeSelectionChange(Event event) {
 
     }
